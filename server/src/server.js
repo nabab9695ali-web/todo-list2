@@ -37,7 +37,14 @@ app.get('/', (req, res) => {
 });
 
 app.get('/api/health', (req, res) => {
-  res.status(200).json({ status: 'ok', uptime: process.uptime() });
+  const dbState = require('mongoose').connection.readyState;
+  const states = ['Disconnected', 'Connected', 'Connecting', 'Disconnecting'];
+  res.status(200).json({ 
+    status: 'ok', 
+    uptime: process.uptime(),
+    database: states[dbState] || 'Unknown',
+    dbReadyState: dbState
+  });
 });
 
 // API Routes
