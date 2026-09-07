@@ -1,7 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const dotenv = require('dotenv');
-const connectDB = require('./config/db');
+const { connectDB, getLastDbError } = require('./config/db');
 const todoRoutes = require('./routes/todoRoutes');
 
 // Load environment variables
@@ -43,7 +43,8 @@ app.get('/api/health', (req, res) => {
     status: 'ok', 
     uptime: process.uptime(),
     database: states[dbState] || 'Unknown',
-    dbReadyState: dbState
+    dbReadyState: dbState,
+    dbError: getLastDbError()
   });
 });
 
